@@ -2,10 +2,8 @@ define(["exports", "module"], function (exports, module) {
   // this is the entry point for your library
   "use strict";
 
-  module.exports = example;
-
-  function example() {
-    return "This is an example function";
-  }
+  module.exports = {
+    changes: require("./changes.js")
+  };
 });
 //# sourceMappingURL=index.js.map

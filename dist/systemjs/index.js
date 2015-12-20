@@ -1,16 +1,13 @@
 System.register([], function (_export) {
-  _export("default", example);
-
-  // this is the entry point for your library
-
-  function example() {
-    return "This is an example function";
-  }
-
   return {
     setters: [],
     execute: function () {
+      // this is the entry point for your library
       "use strict";
+
+      _export("default", {
+        changes: require("./changes.js")
+      });
     }
   };
 });

@@ -54,14 +54,75 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// this is the entry point for your library
-	'use strict';
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	 // dependencies go here
-	 //'./lib/module'
-	], __WEBPACK_AMD_DEFINE_RESULT__ = function( module /* dependencies params go here */){
+	// this is the entry point for your library
+	"use strict";
 
-	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	module.exports = {
+	  changes: __webpack_require__(1)
+	};
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+	// BitMonster = require('./bitmonster/lib/BitMonster.js')
+
+	var Changes = (function () {
+	  function Changes(key, dostow_host) {
+	    _classCallCheck(this, Changes);
+
+	    this._dostow_host = dostow_host;
+	    this._key = key;
+	    this._bm = new BitMonster(this._dostow_host);
+	    this._store = this._bm.module("store");
+	    this._callbacks = {};
+	    this._fails = {};
+	    this._store.on("onRowChanged", this._on_change);
+	  }
+
+	  _createClass(Changes, {
+	    _on_change: {
+	      value: function _on_change(data) {}
+	    },
+	    watch: {
+	      // _addListener
+
+	      value: function watch(store, filter, success, fail) {
+	        if (this._callbacks[store]) {
+	          fail("store listener already exists");
+	          return;
+	        }
+	        this._store.call("changes", {
+	          store: store,
+	          key: this._key,
+	          filter: filter
+	        }, function (data) {
+	          this._callbacks[store] = success;
+	          success(data);
+	        }, function (err) {
+	          this._fails[store] = fail;
+	          fail(err);
+	        });
+	      }
+	    },
+	    stop: {
+	      value: function stop(store) {
+	        delete this._callbacks[store];
+	        delete this._fails[store];
+	      }
+	    }
+	  });
+
+	  return Changes;
+	})();
+
+	module.exports = Changes;
 
 /***/ }
 /******/ ])

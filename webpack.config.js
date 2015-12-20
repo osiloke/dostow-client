@@ -1,6 +1,6 @@
 module.exports = {
 	// the entry point of your library
-	entry: './index.js',
+	entry: './src/index.js',
 	// where 3rd-party modules can reside
 	resolve : {
 		modulesDirectories : ['node_modules','bower_components']
@@ -17,10 +17,12 @@ module.exports = {
 	},
 	externals: {
 		// Specify all libraries a user need to have in his app,
-		// but which can be loaded externally, e.g. from CDN 
+		// but which can be loaded externally, e.g. from CDN
 		// or included separately with a <script> tag
 
 		// 'jquery': 'jQuery'
+
+    BitMonster: 'imports?BitMonster=>undefined!exports?BitMonster!./src/bitmonster/lib/BitMonster.js',
 	},
 	module: {
 		loaders : [
