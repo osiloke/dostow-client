@@ -93,21 +93,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    watch: {
 	      // _addListener
 
-	      value: function watch(store, filter, success, fail) {
-	        if (this._callbacks[store]) {
-	          fail("store listener already exists");
+	      value: function watch(store, filter, success, failed) {
+	        self = this;
+	        if (this._callbacks[store] || this._fails[store]) {
+	          failed("store listener already exists");
 	          return;
 	        }
+	        this._callbacks[store] = success;
+	        this._fails[store] = failed;
 	        this._store.call("changes", {
-	          store: store,
-	          key: this._key,
-	          filter: filter
+	          Store: store,
+	          Key: this._key,
+	          Filter: filter
 	        }, function (data) {
-	          this._callbacks[store] = success;
 	          success(data);
 	        }, function (err) {
-	          this._fails[store] = fail;
-	          fail(err);
+	          failed(err);
 	        });
 	      }
 	    },

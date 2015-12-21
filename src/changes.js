@@ -14,6 +14,7 @@ class Changes{
   }
   // _addListener
   watch(store, filter, success, failed){
+    self = this
     if (this._callbacks[store] || this._fails[store]){
       failed("store listener already exists")
       return
@@ -21,13 +22,13 @@ class Changes{
 		this._callbacks[store] = success
 		this._fails[store] = failed
     this._store.call("changes", {
-			store:  store,
-      key:  this._key,
-			filter: filter
+			Store:  store,
+      Key:  this._key,
+			Filter: filter
 		}, function(data) {
       success(data)
 		}, function(err) {
-			failed(err);
+      failed(err);
 		})
   }
 
