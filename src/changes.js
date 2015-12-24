@@ -7,10 +7,14 @@ class Changes{
     this._store = this._bm.module("store")
     this._callbacks = {}
     this._fails = {}
+    this._on_change = this._on_change.bind(this);
     this._store.on("onRowChanged", this._on_change);
   }
   _on_change(data){
-
+    let fn = this._callbacks[data.store]
+    if (fn){ 
+      fn(data.new)
+    }
   }
   // _addListener
   watch(store, filter, success, failed){
@@ -21,6 +25,7 @@ class Changes{
     }
 		this._callbacks[store] = success
 		this._fails[store] = failed
+    console.log(this._callbacks)
     this._store.call("changes", {
 			Store:  store,
       Key:  this._key,
