@@ -1,4 +1,7 @@
 // BitMonster = require('./bitmonster/lib/BitMonster.js')
+//@TODO: remove scss and all styling. Notifications should be an event
+// import './bitmonster/lib/BitMonster.scss'
+import BitMonster from './bitmonster/lib/BitMonster.js'
 class Changes{
   constructor(key, dostow_host){
     this._dostow_host = dostow_host
@@ -12,7 +15,7 @@ class Changes{
   }
   _on_change(data){
     let fn = this._callbacks[data.store]
-    if (fn){ 
+    if (fn){
       fn(data.new)
     }
   }
@@ -23,16 +26,17 @@ class Changes{
       failed("store listener already exists")
       return
     }
+    const successFn = success?function(data) {
+      // setTimeout(() => success(data), 100) 
+     success(data) 
+    }:null
 		this._callbacks[store] = success
-		this._fails[store] = failed
-    console.log(this._callbacks)
+		this._fails[store] = failed 
     this._store.call("changes", {
 			Store:  store,
       Key:  this._key,
 			Filter: filter
-		}, function(data) {
-      success(data)
-		}, function(err) {
+		}, successFn, function(err) {
       failed(err);
 		})
   }
@@ -42,5 +46,4 @@ class Changes{
     delete this._fails[store]
   }
 }
-
 export default Changes

@@ -54,10 +54,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// this is the entry point for your library
-	"use strict";
+	'use strict';
 
-	module.exports = {
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	// this is the entry point for your library
+	exports.default = {
 	  changes: __webpack_require__(1)
 	};
 
@@ -67,9 +70,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	// BitMonster = require('./bitmonster/lib/BitMonster.js')
 
@@ -83,47 +90,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._store = this._bm.module("store");
 	    this._callbacks = {};
 	    this._fails = {};
+	    this._on_change = this._on_change.bind(this);
 	    this._store.on("onRowChanged", this._on_change);
 	  }
 
-	  _createClass(Changes, {
-	    _on_change: {
-	      value: function _on_change(data) {}
-	    },
-	    watch: {
-	      // _addListener
-
-	      value: function watch(store, filter, success, failed) {
-	        self = this;
-	        if (this._callbacks[store] || this._fails[store]) {
-	          failed("store listener already exists");
-	          return;
-	        }
-	        this._callbacks[store] = success;
-	        this._fails[store] = failed;
-	        this._store.call("changes", {
-	          Store: store,
-	          Key: this._key,
-	          Filter: filter
-	        }, function (data) {
-	          success(data);
-	        }, function (err) {
-	          failed(err);
-	        });
-	      }
-	    },
-	    stop: {
-	      value: function stop(store) {
-	        delete this._callbacks[store];
-	        delete this._fails[store];
+	  _createClass(Changes, [{
+	    key: "_on_change",
+	    value: function _on_change(data) {
+	      var fn = this._callbacks[data.store];
+	      if (fn) {
+	        fn(data.new);
 	      }
 	    }
-	  });
+	    // _addListener
+
+	  }, {
+	    key: "watch",
+	    value: function watch(store, filter, success, failed) {
+	      self = this;
+	      if (this._callbacks[store] || this._fails[store]) {
+	        failed("store listener already exists");
+	        return;
+	      }
+	      this._callbacks[store] = success;
+	      this._fails[store] = failed;
+	      console.log(this._callbacks);
+	      this._store.call("changes", {
+	        Store: store,
+	        Key: this._key,
+	        Filter: filter
+	      }, function (data) {
+	        success(data);
+	      }, function (err) {
+	        failed(err);
+	      });
+	    }
+	  }, {
+	    key: "stop",
+	    value: function stop(store) {
+	      delete this._callbacks[store];
+	      delete this._fails[store];
+	    }
+	  }]);
 
 	  return Changes;
 	})();
 
-	module.exports = Changes;
+	exports.default = Changes;
 
 /***/ }
 /******/ ])
